@@ -6,17 +6,17 @@ def printHelp():
     print("Usage: python3 [classpath] parser.tc [options] toyc_source_file")
     print("\nwhere options include: ")
     print("\t-help             display this usage message")
-    #print("\t-output <file>    specifies target file name")
+    print("\t-output <file>    specifies target file name")
     #print("\t-class  <file>    specifies class file name")
     print("\t-debug <level>    display messages that aid in tracing the compilation process.")
     print("\t\t\t  If level is: ")
     print("\t\t\t      0 - all messages")
     print("\t\t\t      1 - scanner messages only")
     print("\t\t\t      2 - parser messages only")
-    #print("\t\t\t      3 - code generation messages only")
+    print("\t\t\t      3 - code generation messages only")
     print("\t-abstract         dump the abstract syntax tree")
     print("\t-symbol           dump the symbol table(s)")
-    #print("\t-code             dump the generated program")
+    print("\t-code             dump the generated program")
     print("\t-verbose          display all information\n")
     print("\t-version          display the program version")
 
@@ -61,7 +61,7 @@ def main():
             with open(args.filename, 'r') as file:
                 lines = file.readlines()
             for line in lines:
-                print(line.strip())  
+                print(line.strip("\n"))  
 
 
             
