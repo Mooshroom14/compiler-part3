@@ -75,11 +75,10 @@ def main():
             filename = (args.filename.removesuffix('.tc')) + ".j"
 
         outFile = open(f"{filename}", 'w')
-        gen.genJasmin(astProgram, outFile)
+        gen.genJasmin(astProgram, outFile, filename)
 
 
             
-
 
 if __name__ == "__main__":
     main()
