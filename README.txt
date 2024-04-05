@@ -7,6 +7,7 @@ Instructions:
 
     for run:
         -run command "python3 main.py [options] Test/[filename]"
+        -if using the -outupt option, please specify filename without an extension
 
     for clean:
-        -N/A
+        -run command "python3 clean.py"

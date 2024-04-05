@@ -70,10 +70,12 @@ def main():
         
         if outFile:
             print("file overridden")
+            filename = f"Test/{args.output}.j"
         else:
             filename = (args.filename.removesuffix('.tc')) + ".j"
-            outFile = open(f"{filename}", 'w')
-            gen.genJasmin(astProgram, outFile)
+
+        outFile = open(f"{filename}", 'w')
+        gen.genJasmin(astProgram, outFile)
 
 
             
