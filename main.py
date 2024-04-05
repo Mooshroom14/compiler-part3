@@ -1,6 +1,7 @@
 import argparse 
 from FileParser import productions
 from AbstractSyntax import Trees
+from CodeGen import generator as gen
 
 def printHelp():
     print("Usage: python3 [classpath] parser.tc [options] toyc_source_file")
@@ -24,19 +25,22 @@ def main():
     # Parser Setup
     parser = argparse.ArgumentParser()
     #group = parser.add_mutually_exclusive_group()
-    parser.add_argument("-debug", type=int, choices=[0, 1,2],
+    parser.add_argument("-debug", type=int, choices=[0,1,2,3],
                     help="increase output verbosity")
     parser.add_argument("-verbose", action="store_true",
                     help="displays all information")
     parser.add_argument("-help", action="store_true", help="shows usage information")
     parser.add_argument("filename", help = "file to be compiled")
+    parser.add_argument("-output", type=str, help = "output filename")
     parser.add_argument("-abstract", action="store_true", help="dump the abstract syntax tree")
     parser.add_argument("-symbol", action="store_true", help="dump the symbol table(s)")
+    parser.add_argument("-code", action="store_true", help="dump generated program")
     parser.add_argument("-version", action="store_true", help="display the program version")
 
     args = parser.parse_args()
+    outFile = args.output
 
-    print("part2: Nathan Germain")
+    print("part3: Nathan Germain")
 
     if args.version:
         print("Program Version: v1")
@@ -62,6 +66,14 @@ def main():
                 lines = file.readlines()
             for line in lines:
                 print(line.strip("\n"))  
+
+        
+        if outFile:
+            print("file overridden")
+        else:
+            filename = (args.filename.removesuffix('.tc')) + ".j"
+            outFile = open(f"{filename}", 'w')
+            gen.genJasmin(astProgram, outFile)
 
 
             
