@@ -11,7 +11,7 @@ def FileSetup(outFile, fileIn):
 def genMeta():
     global file
     global filename
-    file.write(f".source {filename}")
+    file.write(f".source {filename}\n")
 
 def genVarDef():
     pass
