@@ -82,3 +82,10 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+"""
+    TODO Symbol Table generator
+    TODO Templates
+    TODO Combine
+
+"""
