@@ -15,3 +15,6 @@ def genMeta():
 
 def genVarDef():
     pass
+
+def genFuncDef():
+    pass
