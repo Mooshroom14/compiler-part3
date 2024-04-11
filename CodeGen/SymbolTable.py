@@ -19,8 +19,11 @@ def incScope():
 
 def addVar(name, type, attr):
     global scope
-    checkForVar(name)
-    table.insert(0, [name, type, attr, scope])
+    if not checkForVar(name):
+        table.insert(0, [name, type, attr, scope])
+    else: 
+        print(f"Variable {name} already exists!")
+        sys.exit()
 
 def checkForVar(var):  
     global table
@@ -28,9 +31,7 @@ def checkForVar(var):
     for item in table:
         if item[0] == var:
             inTable = True
-    if inTable:
-        print(f"Variable {var} already exists!")
-        sys.exit()
+    return True if inTable else False
 
 def printSymTable():
     global table

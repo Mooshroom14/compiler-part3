@@ -37,3 +37,9 @@ def genFuncDef(funcTree):
         st.addVar(x[1], x[0], None)
     st.decScope()
     print(f"{funcTree[0][3][0]}")
+
+def genStatement(stateTree):
+    pass
+
+def genExpression(exprTree):
+    pass
