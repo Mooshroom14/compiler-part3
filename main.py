@@ -2,6 +2,7 @@ import argparse
 from FileParser import productions
 from AbstractSyntax import Trees
 from CodeGen import generator as gen
+from CodeGen.SymbolTable import printSymTable
 
 def printHelp():
     print("Usage: python3 [classpath] parser.tc [options] toyc_source_file")
@@ -76,7 +77,18 @@ def main():
 
         outFile = open(f"{filename}", 'w')
         gen.genJasmin(astProgram, outFile, filename)
+        outFile.close()
 
+        if args.code:
+            print("\nOutput Code File ------------------------------")
+            with open(filename, 'r') as file:
+                lines = file.readlines()
+            for line in lines:
+                print(line.strip("\n"))
+
+        if args.symbol:
+            print("\nSymbol Table ----------------------------------")
+            printSymTable()
 
             
 

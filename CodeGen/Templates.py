@@ -1,3 +1,5 @@
+from CodeGen import SymbolTable as st
+
 file = ""
 filename = ""
 def FileSetup(outFile, fileIn):
