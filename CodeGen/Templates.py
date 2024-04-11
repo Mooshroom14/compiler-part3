@@ -15,8 +15,3 @@ def genMeta():
     global filename
     file.write(f".source {filename}\n")
 
-def genVarDef():
-    pass
-
-def genFuncDef():
-    pass

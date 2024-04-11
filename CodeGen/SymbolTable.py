@@ -35,6 +35,6 @@ def checkForVar(var):
 def printSymTable():
     global table
     for item in table:
-        print("\n")
         for x in item:
             print(f"{x} ", end="")
+        print("\n")
