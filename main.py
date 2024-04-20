@@ -76,7 +76,7 @@ def main():
             filename = (args.filename.removesuffix('.tc')) + ".j"
 
         outFile = open(f"{filename}", 'w')
-        gen.genJasmin(astProgram, outFile, filename)
+        gen.genJasmin(astProgram, outFile, filename, args.debug)
         outFile.close()
 
         if args.code:

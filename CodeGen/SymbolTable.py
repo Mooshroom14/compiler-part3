@@ -20,9 +20,13 @@ def incScope():
 def addVar(name, type, attr):
     global scope
     if not checkForVar(name):
+        if not type == "int":
+            print(f"ERROR: Variable type is not \"int\"!")
+            sys.exit()
         table.insert(0, [name, type, attr, scope])
+        print(f"[CODE GEN] Var {name} added to symbol table!")
     else: 
-        print(f"Variable {name} already exists!")
+        print(f"ERROR: Variable {name} already exists!")
         sys.exit()
 
 def checkForVar(var):  
@@ -32,6 +36,12 @@ def checkForVar(var):
         if item[0] == var:
             inTable = True
     return True if inTable else False
+
+def grabTableValue(var):
+    global table
+    for item in table:
+        if item[0] == var:
+            return item[2] 
 
 def printSymTable():
     global table

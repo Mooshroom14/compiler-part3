@@ -8,10 +8,19 @@ def FileSetup(outFile, fileIn):
     filename = fileIn
     file = outFile
 
-    genMeta()
+    writeMeta()
 
-def genMeta():
+def writeMeta():
     global file
     global filename
     file.write(f".source {filename}\n")
+    file.write(f".")
 
+def writeIf(condtion, hasElse, statements):
+    pass
+
+def writeWhile(condition, statments):
+    pass
+
+def writeMethod(name, type, statements):
+    file.write(f".method {name}(){type}")
