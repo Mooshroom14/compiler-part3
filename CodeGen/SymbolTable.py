@@ -37,12 +37,6 @@ def checkForVar(var):
             inTable = True
     return True if inTable else False
 
-def grabTableValue(var):
-    global table
-    for item in table:
-        if item[0] == var:
-            return item[2] 
-
 def printSymTable():
     global table
     for item in table:
