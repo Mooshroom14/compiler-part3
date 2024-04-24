@@ -51,7 +51,7 @@ def writeMain():
     file.write(f".method public static main([Ljava/lang/String;)V\n")
     file.write(f"   .limit stack 100\n")
     file.write(f"   .limit locals 100\n")
-    file.write(f"   invokestatic {filename}/main()I\n")
+    file.write(f"   invokestatic {filename}/main1()I\n")
     file.write(f".end method\n\n")
 
 def writeIf(condition, hasElse, statements):
@@ -123,7 +123,7 @@ def writeBeginMethod(name, type):
     else:
         print("ERROR: Illegal Type! Ints only!")
         sys.exit()
-    file.write(f".method {name}(){t}\n")
+    file.write(f".method {name}1(){t}\n")
     file.write("   .limit stack 100\n")
     file.write("   .limit locals 100\n")
 
@@ -207,7 +207,7 @@ def writeComp(oper):
     file.write(f"   goto label_{labelCt + 1}\n")
     file.write(f"label_{labelCt}:\n")
     file.write(f"   iconst_0\n")
-    file.write(f"label_{labelCt+1}\n")
+    file.write(f"label_{labelCt+1}:\n")
     labelCt += 2
 
 def writeWrite(expr):
