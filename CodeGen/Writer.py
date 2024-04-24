@@ -5,7 +5,6 @@ import sys
 file = ""
 filename = ""
 varCount = 0
-stackList = []
 localVals = []
 labelCt = 0
 
@@ -56,14 +55,36 @@ def writeMain():
     file.write(f".end method\n\n")
 
 def writeIf(condition, hasElse, statements):
+    #print(len(statements))
     condOps = ["==","<","<=",">=",">","||","&&","!="]
-    print(condition)
+    #print(condition)
+    file.write(f"; If Statement\n")
     if condition[1] in condOps:
-        print("Condition is relational!")
+        #print("Condition is relational!")
         if type(condition[0]) is list:
-            print("Expression 1")
+            #print("Expression 1")
+            writeExpression(condition[0][0],condition[0][2],condition[0][1])
+        else:
+            file.write(f"   ldc {condition[0]}\n")
+
         if type(condition[2]) is list:
-            print("Expression 2")
+            #print("Expression 2")
+            writeExpression(condition[0][0],condition[0][2],condition[0][1])
+        else:
+            file.write(f"   ldc {condition[2]}\n")
+
+        writeExpression(None, None, condition[1])
+        file.write(f"   ifeq label_True\n")
+        file.write(f"   goto label_Else\n")
+        file.write(f"label_True:\n")
+        #print(statements[0])
+        gen.genStatement(statements[0])
+        file.write(f"label_Else:\n")
+        #print(statements[1])
+        if hasElse:
+            #print("Has else")
+            gen.genStatement(statements[1])
+
     else:
         print("NO")
 
@@ -71,17 +92,15 @@ def writeIf(condition, hasElse, statements):
 
 def writeWhile(condition, statements):
     global labelCt
-    whileLabel = labelCt
-    endLabel = labelCt + 2
-    #print(len(condition))
+    file.write(f"; While Loop\n")
     if len(condition) == 3:
-        file.write(f"label_{labelCt}:       ; While Loop\n")
-        labelCt += 1
+        file.write(f"label_While:\n")
         writeExpression(condition[0], condition[2], condition[1])
+        file.write("   ifne label_endWhile\n")
         gen.genStatement(statements)
 
-    file.write(f"   goto label_{whileLabel}\n")
-    file.write(f"label_{endLabel}:\n")
+    file.write(f"   goto label_While\n")
+    file.write(f"label_endWhile:\n")
 
 def writeVarAssignment(var, value):
     global varCount
@@ -127,7 +146,7 @@ def writeExpression(num1, num2, op):
             writeExpression(num2[0],num2[2],num2[1])
         else:
             writeVarAssignment(num1,num2)
-    elif len(num1) == 3:
+    elif num1 != None and len(num1) == 3:
         writeExpression(num1[0],num1[2],num1[2])            
     else:
         if type(num1) is list:
@@ -136,15 +155,16 @@ def writeExpression(num1, num2, op):
             else:
                 print("Writing sub expression")
                 writeExpression(num1[0],num1[2],num1[1])
-        else:
+        elif num1 != None:
             file.write(f"   ldc {num1}\n")
+
         if type(num2) is list:
             if num2[0] == "ID":
                 writeLoad(num2)
             else:
                 print("Writing sub expression")
                 writeExpression(num2[0],num2[2],num2[1])
-        else:
+        elif num2 != None:
             file.write(f"   ldc {num2}\n")
         
         match(op):
@@ -186,17 +206,38 @@ def writeComp(oper):
     file.write(f"   goto label_{labelCt + 1}\n")
     file.write(f"label_{labelCt}:\n")
     file.write(f"   iconst_0\n")
-    labelCt += 1
+    file.write(f"label_{labelCt+1}\n")
+    labelCt += 2
 
 def writeWrite(expr):
-        global localVals
-        file.write(f"   getstatic java/lang/System/out Ljava/io/PrintStream;\n")
-        expr = gen.genExpression(expr)
-        if type(expr) is list and expr[0] == "ID":
-            st.checkForVar(expr[1])
-            item = grabLocalVal(expr)
-            if item != None:
-                file.write(f"   iload_{item}\n")
-        else:
-            file.write(f"   ldc {expr}\n")
-        file.write(f"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n")
+    global localVals
+    file.write(f"   getstatic java/lang/System/out Ljava/io/PrintStream;\n")
+    expr = gen.genExpression(expr)
+    if type(expr) is list and expr[0] == "ID":
+        st.checkForVar(expr[1])
+        item = grabLocalVal(expr)
+        if item != None:
+            file.write(f"   iload_{item}\n")
+    else:
+        file.write(f"   ldc {expr}\n")
+    file.write(f"   invokevirtual java/io/PrintStream/print(Ljava/lang/String;)V\n")
+
+def writeRead(expr):
+    global varCount
+    global localVals
+    file.write(f"; Read\n")
+    file.write(f"   new java/util/Scanner\n")
+    file.write(f"   dup\n")
+    file.write(f"   getstatic java/lang/System/in Ljava/io/InputStream;\n")
+    file.write(f"   invokespecial java/util/Scanner/<init>(Ljava/io/InputStream;)V\n")
+    file.write(f"   astore_{varCount}\n")
+    scannerStore = varCount
+    varCount += 1
+    print(expr)
+    for item in expr:
+        file.write(f"   aload_{scannerStore}\n")
+        file.write(f"   invokevirtual java/util/Scanner/nextInt()I\n")
+        file.write(f"   istore_{varCount}\n")
+        localVals.append([item[1], varCount])
+        varCount += 1
+        

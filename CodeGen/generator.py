@@ -55,14 +55,16 @@ def genStatement(stateTree):
     statement = stateTree[0]
     match(statement):
         case "ifState()":
-            print("Found if state!")
+            #print("Found if state!")
             hasElse = False
             #print(f"{stateTree[1][0]}")
             ifCond = genExpression(stateTree[1][0])
-            states = stateTree[1][1]
+            states = []
+            states.append(stateTree[1][1])
             if stateTree[1][2] != None:
-                print("Has an else")
+                #print("Has an else")
                 hasElse = True
+                #print(stateTree[1][2])
                 states.append(stateTree[1][2])
             writer.writeIf(ifCond, hasElse, states)
             
@@ -80,7 +82,7 @@ def genStatement(stateTree):
                 genStatement(item)
             st.decScope()
         case "returnState()":
-            print("Found return state!")
+            #print("Found return state!")
             writer.writeReturn()
         case "whileState()":
             whileCond = []
@@ -90,10 +92,11 @@ def genStatement(stateTree):
             writer.writeWhile(whileCond, stateTree[1][1])
             st.decScope()
         case "writeState()":
-            print("Found write state!")
+            #print("Found write state!")
             writer.writeWrite(stateTree[1])
         case "readState()":
             print("Found read state!")
+            writer.writeRead(stateTree[1])
         case "exprState()":
             #print("Found expression state!")
             expr = genExpression(stateTree[1])

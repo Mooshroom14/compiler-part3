@@ -220,12 +220,14 @@ def WhileStatement():
     return tree
 
 def ReadStatement():
+    tree = []
     helper.entering("Read Statement", debug)
     loadToken()
     helper.accept(activeToken, tokens.LEFTPAREN)
     loadToken()
     while activeToken != tokens.RIGHTPAREN:
-        ID = activeToken
+        if activeToken == tokens.ID:
+            tree.append(["ID", currTokenVal])
         loadToken()
         if activeToken == tokens.COMMA:
             loadToken()
@@ -233,7 +235,7 @@ def ReadStatement():
     loadToken()
     helper.accept(activeToken, tokens.SEMICOLON)
     helper.exiting("Read Statement", debug)
-    return Trees.productions.prRead
+    return tree
 
 def WriteStatement():
     helper.entering("Write Statement", debug)
