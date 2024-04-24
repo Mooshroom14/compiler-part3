@@ -41,5 +41,5 @@ def printSymTable():
     global table
     for item in table:
         for x in item:
-            print(f"{x} ", end="")
+            print(f"    {x} ", end="")
         print("\n")

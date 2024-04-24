@@ -88,7 +88,7 @@ def main():
 
         if args.symbol:
             print("\nSymbol Table ----------------------------------")
-            print("Name -- Type -- Args/var -- Scope")
+            print("\n---Name -- Type -- Args/Var -- Scope-----------")
             printSymTable()
 
             

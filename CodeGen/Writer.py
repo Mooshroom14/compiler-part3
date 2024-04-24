@@ -132,6 +132,7 @@ def writeEndMethod():
 
 def writeReturn():
     file.write(f"; Return\n")
+    file.write(f"   iconst_0\n")
     file.write(f"   ireturn\n")
 
 def writeNewLine():
@@ -233,7 +234,7 @@ def writeRead(expr):
     file.write(f"   astore_{varCount}\n")
     scannerStore = varCount
     varCount += 1
-    print(expr)
+    #print(expr)
     for item in expr:
         file.write(f"   aload_{scannerStore}\n")
         file.write(f"   invokevirtual java/util/Scanner/nextInt()I\n")

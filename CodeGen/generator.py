@@ -67,12 +67,13 @@ def genStatement(stateTree):
                 #print(stateTree[1][2])
                 states.append(stateTree[1][2])
             writer.writeIf(ifCond, hasElse, states)
-            
+            print("[CODE GEN] Wrote an if statment")
         case "breakState()":
             pass
         case "newLineState()":
             #print("Found newline state!")
             writer.writeNewLine()
+            print("[CODE GEN] Wrote a newline")
         case "nullState()":
             pass
         case "blockState()":
@@ -84,19 +85,23 @@ def genStatement(stateTree):
         case "returnState()":
             #print("Found return state!")
             writer.writeReturn()
+            print("[CODE GEN] Wrote a return")
         case "whileState()":
             whileCond = []
             st.incScope()
             #print("Found while state!")
             whileCond = genExpression(stateTree[1][0])
             writer.writeWhile(whileCond, stateTree[1][1])
+            print("[CODE GEN] Wrote a while loop")
             st.decScope()
         case "writeState()":
             #print("Found write state!")
             writer.writeWrite(stateTree[1])
+            print("[CODE GEN] Wrote a write")
         case "readState()":
-            print("Found read state!")
+            #print("Found read state!")
             writer.writeRead(stateTree[1])
+            print("[CODE GEN] Wrote a read")
         case "exprState()":
             #print("Found expression state!")
             expr = genExpression(stateTree[1])
@@ -106,9 +111,11 @@ def genStatement(stateTree):
                     st.checkForVar(expr[0][1])
             else:
                 writer.writeExpression(expr[0],expr[2],expr[1])
+            print("[CODE GEN] Wrote an Expression")
 
         case "varDef":
             genVarDef(stateTree)
+            print("[CODE GEN] Wrote a variable definition")
        # case _:
        #    genStatement(statement)
     #print(stateTree)
