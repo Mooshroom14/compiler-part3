@@ -51,8 +51,8 @@ def writeMain():
     file.write(f".method public static main([Ljava/lang/String;)V\n")
     file.write(f"   .limit stack 100\n")
     file.write(f"   .limit locals 100\n")
-    file.write(f"   invokestatic {filename}/main1()I\n")
-    file.write(f".end method\n\n")
+    #file.write(f"   invokestatic {filename}/main1()I\n")
+    #file.write(f".end method\n\n")
 
 def writeIf(condition, hasElse, statements):
     #print(len(statements))
@@ -116,16 +116,16 @@ def writeVarAssignment(var, value):
         localVals.append([var, varCount])
         varCount += 1
 
-def writeBeginMethod(name, type):
-    t = ""
-    if type == "int":
-        t = "I"
-    else:
-        print("ERROR: Illegal Type! Ints only!")
-        sys.exit()
-    file.write(f".method {name}1(){t}\n")
-    file.write("   .limit stack 100\n")
-    file.write("   .limit locals 100\n")
+#def writeBeginMethod(name, type):
+    #t = ""
+    #if type == "int":
+    #    t = "I"
+    #else:
+    #    print("ERROR: Illegal Type! Ints only!")
+    #    sys.exit()
+    #file.write(f".method {name}1(){t}\n")
+    #file.write("   .limit stack 100\n")
+    #file.write("   .limit locals 100\n")
 
 def writeEndMethod():
     file.write(".end method\n")

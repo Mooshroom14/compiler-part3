@@ -29,10 +29,9 @@ def getNextToken(file, debug, verbose):
 def accept(loaded, token):
     global currLine
     global currLineText
-    global currPos
 
     if loaded != token:
-        spaces = errorSpaces(value)
+        spaces = errorSpaces()
         if currLineText[len(currLineText)-1] == "\n":
             currLineText = currLineText[:len(currLineText)-2]
         print(f"{currLine}: {currLineText}")
@@ -42,14 +41,26 @@ def accept(loaded, token):
         return True
     
 def printTypeError():
-    spaces = errorSpaces(value)
+    spaces = errorSpaces()
     if currLineText[len(currLineText)-1] == "\n":
         currLineText = currLineText[:len(currLineText)-2]
     print(f"{currLine}: {currLineText}")
     print(f"{spaces}^ int or char expected")
     sys.exit()
+
+def printMissingError(missing):
+    global currLine
+    global currLineText
+    
+    spaces = errorSpaces()
+    if currLineText[len(currLineText)-1] == "\n":
+            currLineText = currLineText[:len(currLineText)-2]
+    print(f"{currLine}: {currLineText}")
+    print(f"{spaces}^ Missing {missing} in expression!")
+    sys.exit()
         
-def errorSpaces(val):
+def errorSpaces():
+    global currPos
     final = ""
     numSpaces = ((currPos) - 1) + 3
     for i in range(0,numSpaces):
@@ -151,3 +162,8 @@ def spaces():
         string += " "
 
     return string
+
+ops = ["+", "-", "*", "/", "<", ">", "=", "&", "|"]
+
+def isOperator(op):
+    return True if op in ops else False

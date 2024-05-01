@@ -39,7 +39,7 @@ def genFuncDef(funcTree):
         global main
         main = True
     st.addVar(funcTree[0][2], funcTree[0][1], ['proc', len(funcTree[0][3][0])])
-    writer.writeBeginMethod(funcTree[0][2], funcTree[0][1])
+    #writer.writeBeginMethod(funcTree[0][2], funcTree[0][1])
     st.incScope()
     for x in funcTree[0][3][0]:
         st.addVar(x[1], x[0], None)

@@ -232,6 +232,8 @@ def ReadStatement():
         if activeToken == tokens.COMMA:
             loadToken()
     helper.accept(activeToken, tokens.RIGHTPAREN)
+    if len(tree) == 0:
+        helper.printMissingError("variables")
     loadToken()
     helper.accept(activeToken, tokens.SEMICOLON)
     helper.exiting("Read Statement", debug)
@@ -261,7 +263,7 @@ def Expression():
     tree = []
     tree.append(RelopExpression())
     #print(tree)
-    if activeToken == tokens.ASSIGN:
+    while activeToken == tokens.ASSIGN:
         tree.append(Trees.Operator(currTokenVal))
         loadToken()
         tree.append(RelopExpression())
@@ -272,7 +274,7 @@ def RelopExpression():
     helper.entering("Relop Expression", debug)
     tree = []
     tree.append(SimpleExpression())
-    if activeToken == tokens.RELOP:
+    while activeToken == tokens.RELOP:
         tree.append(Trees.Operator(currTokenVal))
         loadToken()
         tree.append(SimpleExpression())
@@ -283,7 +285,7 @@ def SimpleExpression():
     helper.entering("Simple Expression", debug)
     tree = []
     tree.append(Term())
-    if activeToken == tokens.ADDOP:
+    while activeToken == tokens.ADDOP:
         tree.append(Trees.Operator(currTokenVal))
         loadToken()
         tree.append(Term())
@@ -294,7 +296,7 @@ def Term():
     helper.entering("Term", debug)
     tree = []
     tree.append(Primary())
-    if activeToken == tokens.MULOP:
+    while activeToken == tokens.MULOP:
         tree.append(Trees.Operator(currTokenVal))
         loadToken()
         tree.append(Primary())
@@ -318,13 +320,15 @@ def Primary():
             loadToken()
             if activeToken == tokens.LEFTPAREN:
                 tree = ["funcCall()", ID, FunctionCall()]
-                helper.accept(activeToken, tokens.RIGHTPAREN)
+                #loadToken()
+                #helper.accept(activeToken, tokens.RIGHTPAREN)
             else:
                 prod = Trees.productions.terID
                 tree = Trees.createExpressionTree(prod, ID)
         case tokens.NOT:
             loadToken()
             tree = ["not()", Primary()] 
+            loadToken()
         case tokens.NUMBER:
             prod = Trees.productions.terNum
             tree = Trees.createExpressionTree(prod, currTokenVal)
@@ -352,8 +356,9 @@ def FunctionCall():
         tree = ActualParameters()
     else:
         tree = None
-    loadToken()
+    #print(f"{activeToken}")
     helper.accept(activeToken, tokens.RIGHTPAREN)
+    loadToken()
     helper.exiting("Function Call", debug)
     return tree
 

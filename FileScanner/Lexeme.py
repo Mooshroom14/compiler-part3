@@ -1,5 +1,6 @@
 from FileScanner.Token import fsm
 from FileScanner.Token import tokenOps as to
+from FileParser import helper
 import sys
 
 commentBlock = False
@@ -77,6 +78,26 @@ def scanNextToken(codeFile, debug, verbose):
 
             continue
 
+        if currentState == fsm.States.commentBlockStart:
+            lineBuffer = ""
+            currToken = ""
+            currentState = fsm.States.start
+            commentBlockCt += 1
+            commentBlock = True
+
+            continue
+
+        if currentState == fsm.States.commentBlockEnd:
+            lineBuffer = ""
+            currToken = ""
+            currentState = fsm.States.start
+            commentBlockCt -= 1
+
+            if commentBlockCt == 0:
+                commentBlock = False
+
+            continue
+
         if currentState == fsm.States.illegalTokenState:
             print("WARNING: Illegal Character/Token Detected")
             currentState = fsm.States.start
@@ -119,16 +140,22 @@ def scanNextToken(codeFile, debug, verbose):
                 case fsm.States.LeftParen:
                     if char == "\"":
                         endToken = True
+                    elif char == "'":
+                        endToken = True
                     elif char.isalpha():
                         endToken = True
                     elif char == "(":
                         endToken = True
                     elif char == ")":
                         endToken = True
+                    elif char.isdigit():
+                        endToken = True
                     else:
                         endToken = False
                 case fsm.States.StringToken:
                     if char == ")":
+                        endToken = True
+                    elif char == ";":
                         endToken = True
                     else:
                         endToken = False
@@ -139,21 +166,65 @@ def scanNextToken(codeFile, debug, verbose):
                         endToken = True
                     elif char == "=":
                         endToken = True
+                    elif char == ")":
+                        endToken = True
                     else:
                         endToken = False
                 case fsm.States.SemiToken:
                     if char == "}":
                         endToken = True
+                    elif char == ";":
+                        endToken = True
                     else:
                         endToken = False
+                case fsm.States.CharToken:
+                    if char == ")":
+                        endToken = True
+                    elif helper.isOperator(char):
+                        endToken = True
+                    else:
+                        endToken = False
+                case fsm.States.LeftCurly:
+                    if char == "}":
+                        endToken = True
+                    elif char == "{":
+                        endToken = True
+                    else:
+                        endToken = False
+                case fsm.States.RightCurly:
+                    if char == "{":
+                        endToken = True
+                    elif char == ";":
+                        endToken = True
+                    elif char == "}":
+                        endToken = True
+                    else:
+                        endToken = False
+                case fsm.States.CommaToken:
+                    if char == "\"":
+                        endToken = True
+                    elif char.isalpha():
+                        endToken = True
+                    else:
+                        endToken = False  
+                case fsm.States.AddOpToken:
+                    if char.isalpha():
+                        endToken = True
+                    else:
+                        endToken = False         
                 case _ :
                     pass
+            
             if endToken:
                 charBuffer = char
                 break
         # Check if we have run into white space
         if (char == ' ' or char == '\n'):
             if midString:
+                currentState = fsm.newState(char, currentState)
+                currToken += char
+                currPos += 1
+            elif currentState == fsm.States.initChar:
                 currentState = fsm.newState(char, currentState)
                 currToken += char
                 currPos += 1
